@@ -5,16 +5,11 @@ import time
 import string
 
 
-
-
-
-
 def generateRandomString(setOfLetters, lenght):
     return ''.join(random.choice(setOfLetters) for i in range(lenght))
 
 
-def generateText(img):
-    textString = generateRandomString(textLetters, textLenght)
+def generateText(img, textString):
     
     d = ImageDraw.Draw(img)
 
@@ -94,14 +89,14 @@ availableThemes = ['DARK', 'LIGHT', 'NONE']
 # LIGHT theme will use color values superior to 128 for the R, G, and B channels
 # DARK theme will use color values bellow 128.
 # NONE will use the entire spectrum.
-theme = availableThemes[1]
+theme = availableThemes[2]
 
-width = 900                             # Width of the resulting output
-height = 400                            # Height of the resulting output
+width = 400                             # Width of the resulting output
+height = 300                            # Height of the resulting output
 
-textLenght = 6                          # Lenght of the captcha
-textPosition = [75, 150]                # Starting position (x, y)
-textLetters = string.ascii_uppercase    # Set of letters. Can be any string
+textLenght = 5                          # Lenght of the captcha
+textPosition = [15, 80]                 # Starting position (x, y)
+textLetters = "0123456789"              # Set of letters. Can be any string
 
 mainColor = (0, 0, 0)                   # This is the color of the lines, points, and text
 textRandomColor = False                 # If True, use random colors for each character
@@ -110,27 +105,27 @@ backgroundTransparent = False           # If True, the file will be exported in 
 backgroundColor = (255, 255, 255)       # The color used in the background.
 
 fontFolder = "font/"                    # Where are the font located
-fontSizeMin = 130                       # Minimum size for the characters
-fontSizeMax = 160                       # Maximum size for the characters
-fontSpacing = 0.9                       # Seperation factor. 1 = no overlaying and no seperation.
-fontVerticalDivergence = 50             # How much the characters's vertical position can vary.
+fontSizeMin = 90                        # Minimum size for the characters
+fontSizeMax = 110                       # Maximum size for the characters
+fontSpacing = 0.8                       # Seperation factor. 1 = no overlaying and no seperation.
+fontVerticalDivergence = 30             # How much the characters's vertical position can vary.
 
 linesEnabled = True                     # Creates random lines on the captcha
 linesRandomColor = False                # If True, use random colors for each line
 linesCountMin = 3                       # Minimum amount of lines
-linesCountMax = 10                      # Maximum amount of lines
-linesWidthMin = 1                       # Minimum thickness for the lines
-linesWidthMax = 2                       # Maximum thickness for the lines
+linesCountMax = 7                      # Maximum amount of lines
+linesWidthMin = 2                       # Minimum thickness for the lines
+linesWidthMax = 4                       # Maximum thickness for the lines
 
 pointsEnabled = True                    # Creates random points on the captcha
 pointsRandomColor = False               # If True, use random colors for each point
-pointsCountMin = 200                    # Minimum amount of points
+pointsCountMin = 400                    # Minimum amount of points
 pointsCountMax = 1000                   # Maximum amount of points
-pointsSizeMin = 1                       # Minimum size of a point
-pointsSizeMax = 3                       # Maximum size of a point
+pointsSizeMin = 2                       # Minimum size of a point
+pointsSizeMax = 4                       # Maximum size of a point
 
 exportFolder = 'output/'                # The folder path for the export folder.
-exportCount = 100                       # The number of captcha to generate.
+exportCount = 1000                       # The number of captcha to generate.
 exportName = 'captcha'                  # A number will be appended if exportCount > 1
 jpgQuality = 0                          # The quality of the exportation. Only compatible with JPG
 
@@ -195,14 +190,14 @@ for i in range(exportCount):
         img = Image.new('RGBA', (width, height))
     else:
         img = Image.new('RGB', (width, height), color = backgroundColor)
-
+    text = generateRandomString(textLetters, textLenght)
     # Generation
-    generateText(img)
+    generateText(img, text)
     if linesEnabled:  generateRandomLines(img)
     if pointsEnabled: generateRandomPoints(img)
 
     # Exportation
-    outputName = exportFolder + exportName
+    outputName = exportFolder + text
     if exportCount > 1: outputName +=  '_' + str(i)
     if backgroundTransparent:
         outputName += '.png'
